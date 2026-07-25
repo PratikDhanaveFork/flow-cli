@@ -31,7 +31,10 @@ var ErrDoesNotExist = errors.New("missing configuration")
 // Exists checks if file exists on the specified path.
 func Exists(path string) bool {
 	info, err := os.Stat(path)
-	if os.IsNotExist(err) {
+	if err != nil {
+		// Covers os.IsNotExist and other stat errors (permission denied,
+		// not-a-directory component, ...) where info is nil — dereferencing
+		// info.IsDir() below would panic.
 		return false
 	}
 	return !info.IsDir()
