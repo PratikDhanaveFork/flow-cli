@@ -434,6 +434,12 @@ func (j *account) UnmarshalJSON(b []byte) error {
 	case advancedFormatPre022:
 		var advancedOld advanceAccountPre022
 		err = json.Unmarshal(b, &advancedOld)
+		if err != nil {
+			return err
+		}
+		if len(advancedOld.Keys) == 0 {
+			return fmt.Errorf("account %s: keys must not be empty", advancedOld.Address)
+		}
 
 		j.Advanced = advancedAccount{
 			Address: advancedOld.Address,
