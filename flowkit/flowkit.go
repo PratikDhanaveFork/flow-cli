@@ -531,6 +531,7 @@ func (f *Flowkit) eventWorker(jobChan <-chan grpc.EventRangeQuery, results chan<
 		blockEvents, err := f.gateway.GetEvents(q.Type, q.StartHeight, q.EndHeight)
 		if err != nil {
 			results <- eventWorkerResult{nil, err}
+			continue
 		}
 		results <- eventWorkerResult{blockEvents, nil}
 	}
